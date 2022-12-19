@@ -5,36 +5,37 @@
  *  Can NOT be used in network game !
  */
 
-// Step 3 =====================================================================================
-ch2_cov_lim1 <- {a = (-1), b = 1}
-
-// Step 5 =====================================================================================
-ch2_cov_lim2 <- {a = 0, b = 4}
-
-// Step 6 =====================================================================================
-ch2_cov_lim3 <- {a = 3, b = 5}
-	
 class tutorial.chapter_02 extends basic_chapter
 {
 	chapter_name  = "Ruling the Roads"
 	chapter_coord = coord(98,33)
 
 	startcash     = 800000	   				// pl=0 startcash; 0=no reset
-	comm_script = false
 	stop_mark = false 
 
 	gltool = null
 	gl_wt = wt_road
+
+	// Step 4 =====================================================================================
+	ch2_cov_lim1 = {a = 0, b = 0}
+
+	// Step 6 =====================================================================================
+	ch2_cov_lim2 = {a = 0, b = 0}
+
+	// Step 7 =====================================================================================
+	ch2_cov_lim3 = {a = 0, b = 0}
 
 	//Limites para las ciudades
 	city1_lim = {a = coord(83,21), b = coord(103,42)} 
 	city2_lim = {a = coord(87,1), b = coord(99,11)} 
 	cty1 = {c = coord(92,33), name = ""}
 
+	sch_cov_correct = false
+
 	// Step 1 =====================================================================================
 	//Carretera para el deposito
-	dep_lim1 = {a = null, b = null}
-	dep_lim2 = {a = null, b = null}
+	dep_lim1 = {a = null, b = null} //auto started
+	dep_lim2 = {a = null, b = null} //auto started
 	coorda = coord(98,32)
 	c_dep = coord(98,33)  // depot
 	coordb = coord(97,33)
@@ -43,9 +44,13 @@ class tutorial.chapter_02 extends basic_chapter
 
 	// Step 3 =====================================================================================
 	//Paradas de Autobus
-	c_lock = [coord(99,28), coord(98,32), coord(99,32), coord(97,27), coord(97,26)]
-	sch_cov_correct = false
-	sch_list1 =	[coord(87,27), coord(88,32), coord(91,37), coord(96,38), coord(93,32), coord(92,27), coord(98,28)]
+	c_lock =	[
+					coord(99,28), coord(98,32), coord(99,32), coord(97,27), coord(97,26)
+				]
+	sch_list1 =	[
+					coord(87,27), coord(88,32), coord(91,37), coord(96,38),
+					coord(93,32), coord(92,27), coord(98,28)
+				]
 
 	// Step 4 =====================================================================================
 	// El primer Autobus
@@ -105,15 +110,20 @@ class tutorial.chapter_02 extends basic_chapter
 		rules.clear()
 		set_all_rules(0)
 
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch2_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch2_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch2_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
+
+		dep_cnr1 = get_dep_cov_nr(ch2_cov_lim1.a,ch2_cov_lim1.b)
+		dep_cnr2 = get_dep_cov_nr(ch2_cov_lim2.a,ch2_cov_lim2.b)
+		dep_cnr3 = get_dep_cov_nr(ch2_cov_lim3.a,ch2_cov_lim3.b)
+
 		cty1.name = get_city_name(cty1.c)
 		cty2.name = get_city_name(cty2.c)
 
 		dep_lim1 = {b = c_dep, a = coorda}
 		dep_lim2 = {b = c_dep, a = coordb}
-
-		dep_cnr1 = get_dep_cov_nr(ch2_cov_lim1.a,ch2_cov_lim1.b)
-		dep_cnr2 = get_dep_cov_nr(ch2_cov_lim2.a,ch2_cov_lim2.b)
-		dep_cnr3 = get_dep_cov_nr(ch2_cov_lim3.a,ch2_cov_lim3.b)
 
 		local pl = 0
 		//Schedule list form current convoy

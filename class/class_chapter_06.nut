@@ -5,16 +5,6 @@
  *  Can NOT be used in network game !
  */
 
-//Step 2 =====================================================================================
-ch6_cov_lim1 <- {a = 34, b = 36}
-
-//Step 3 =====================================================================================
-ch6_cov_lim2 <- {a = 35, b = 38}
-
-//Step 4 =====================================================================================
-ch6_cov_lim3 <- {a = 37, b = 43}
-
-
 class tutorial.chapter_06 extends basic_chapter
 {
 	chapter_name  = "The forgotten Air transport"
@@ -22,6 +12,15 @@ class tutorial.chapter_06 extends basic_chapter
 	startcash     = 500000	   				// pl=0 startcash; 0=no reset
 
 	gl_wt = wt_air
+
+	//Step 2 =====================================================================================
+	ch6_cov_lim1 = {a = 0, b = 0}
+
+	//Step 3 =====================================================================================
+	ch6_cov_lim2 = {a = 0, b = 0}
+
+	//Step 4 =====================================================================================
+	ch6_cov_lim3 = {a = 0, b = 0}
 
 	c_way = coord(0,0)
 
@@ -35,13 +34,13 @@ class tutorial.chapter_06 extends basic_chapter
 
 	// Step 1 =====================================================================================
 	// Pista de aterrizaje --------------------------
-	c1_track = {a = coord(107,17), b = coord(107,21)}
+	c1_track = {a = coord(107,17), b = coord(107,21), dir = 2}
 	c1_start = coord(107,17)
 	c1_is_way = null
 	obj1_way_name = "runway_modern"
 
 	// Pista de maniobras --------------------------
-	c2_track = {a = coord(102,19), b = coord(107,19)}
+	c2_track = {a = coord(102,19), b = coord(107,19), dir = 2}
 	c2_start = coord(102,19)
 	c2_is_way = null
 	obj2_way_name = "air_movement_area"
@@ -94,6 +93,11 @@ class tutorial.chapter_06 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
+
+		local lim_idx = cv_list[(persistent.chapter - 2)].idx
+		ch6_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
+		ch6_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
+		ch6_cov_lim3 = {a = cv_lim[lim_idx+2].a, b = cv_lim[lim_idx+2].b}
 
 		d1_cnr = get_dep_cov_nr(ch6_cov_lim1.a,ch6_cov_lim1.b)
 		d2_cnr = get_dep_cov_nr(ch6_cov_lim2.a,ch6_cov_lim2.b)
