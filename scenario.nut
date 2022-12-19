@@ -4,8 +4,8 @@
  
  *  Can NOT be used in network game !
  */
-const version = 1642
-map.file = "tutorial128.sve"
+const version = 1650
+map.file = "tutorial192.sve"
 scenario_name             <- "Tutorial Scenario"
 scenario.short_description = scenario_name
 scenario.author            = "Yona-TYT"
@@ -26,7 +26,7 @@ script_test <- true
 
 persistent.st_nr <- array(30)			//Numero de estaciones/paradas
 
-scr_jump <- true 
+scr_jump <- false 
 
 gl_percentage <- 0
 persistent.gl_percentage <- 0
@@ -89,15 +89,14 @@ tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rai
 					ship = translate("SHIPTOOLS"), land = translate("SLOPETOOLS"), spec = translate("SPECIALTOOLS")
 				}
 
-// placeholder for good names in pak128
 good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "Kohle",
-					flour = "flour", deliv = "Crates Deliverables", oel = "Oel", gas = "Gasoline"
+					flour = "flour", deliv = "Crates Deliverables", oel = "oil", gas = "fuel", wood = "logs", plan = "boards"
 				}
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 
 // Complemento para obtener tiempo de espera
-tick_wait <- 8
+tick_wait <- 16
 
 chapter            <- null			// used later for class
 chapter_max        <- 7				// amount of chapter
@@ -115,21 +114,18 @@ function get_set_name(name)
 }
 
 simu_version <- "122.0.1"
-pak_name <- "pak128"
+pak_name <- "pak192.comic"
 current_st <- "0"
 current_pak <- "pak"
-gl_correct <- false
 
 function string_analyzer()
 {
 	local result = {pak= false , st = false}
-
 	//Check version and pakset name
 	current_pak = get_set_name(get_pakset_name())
 	current_st = get_version_number()
 
 	local p_siz = {a = current_pak.len(), b = pak_name.len()}
-
 
 	//Pak name analyzer
 	local siz_a = max(p_siz.a, p_siz.a)
@@ -209,6 +205,7 @@ function string_analyzer()
 {
 	//Check version and pakset name
 	resul_version = string_analyzer()
+	include(nut_path+"class_basic_convoys") 		// include class for detect eliminated convoys
 	include(nut_path+"class_basic_chapter") 		// include class for basic chapter structure
 
 }
@@ -220,19 +217,25 @@ chapter            <- tutorial.chapter_02      	// must be placed here !!!
 
 function script_text()
 {	
+
 	if(!correct_cov){
 		gui.add_message(""+translate("Advance not allowed"))
 		return null
 	}
-	if(/*scr_jump*/ persistent.chapter<7){
-		//gui.add_message(""+persistent.chapter)
+
+	if(persistent.chapter<7){
+
+		scr_jump = true
+
 		local result = null
-		scr_jump = false
+
 		result = chapter.script_text()
 		if(result == 0) gui.add_message(""+translate("Advance not allowed")+"")
+
+		scr_jump = false
 		return result
 	}
-//	else gui.add_message(""+translate("Updating text ... Waiting ...")+"")
+
 	return null
 }
 
@@ -272,7 +275,7 @@ function load_chapter(number,pl)
 	}
 }
 
-function load_chapter2(number,pl)
+function load_conv_ch(number, step, pl)
 {
     rules.clear()
 	if (!resul_version.pak || !resul_version.st){
@@ -285,8 +288,11 @@ function load_chapter2(number,pl)
 
 		if ( (number == persistent.chapter) && (chapter.startcash > 0) )  // set cash money here
 			player_x(0).book_cash( (chapter.startcash - player_x(0).get_cash()[0]) * 100)
-			persistent.chapter = number
-			chapter.chap_nr = number
+
+		chapter.step_nr(step)
+		persistent.chapter = number
+		chapter.chap_nr = number
+		chapter.start_chapter()
 	}
 }
 
@@ -315,7 +321,8 @@ function get_info_text(pl)
 
 function get_rule_text(pl)
 {
-	/*local cov_nr_debug = "All convoys-> "+gall_cov+":: Convoys count-> "+gcov_nr+":: current covoy-> "+current_cov+":: Correct cov-> "+correct_cov+":: Convoy id-> "+gcov_id+"<br><br>"
+	/*
+	local cov_nr_debug = "All convoys-> "+gall_cov+":: Convoys count-> "+gcov_nr+":: current covoy-> "+current_cov+":: Correct cov-> "+correct_cov+":: Convoy id-> "+gcov_id+"<br><br>"
 	local tx = ""
 	local j=0
 	for(j;j<gcov_nr;j++){
@@ -340,13 +347,13 @@ function get_rule_text(pl)
 		else
 			tx += "<st>["+j+"]</st> "+id_save[j]+"::"+cov_save[j]+"<br>"
 	}
-	return cov_nr_debug + tx */
+	return cov_nr_debug + tx
+	*/
 	return chapter.give_title() + chapter.get_rule_text( pl, my_chapter() )
 }
 
 function get_goal_text(pl)
 {
-	scr_jump = true
 	return chapter.give_title() + chapter.get_goal_text( pl, my_chapter() )
 }
 
@@ -382,11 +389,60 @@ function start()
     resume_game()
 }
 
+function labels_text_debug()
+{
+	local t1 = tile_x(0, 0, -2)
+	local t2 = tile_x(1, 0, -2)
+
+	if(!t1.find_object(mo_label) || !t2.find_object(mo_label)){
+		label_x.create(t1, player_x(1), translate(""+persistent.chapter))
+		label_x.create(t2, player_x(1), translate(""+chapter.step))
+	}
+	else {
+		local l1 = label_x(t1.x, t1.y, t1.z)
+		local l2 = label_x(t2.x, t2.y, t2.z)
+
+		if(correct_cov){
+			local ch_nr = l1.get_text().tointeger()
+			local st_nr = l2.get_text().tointeger()
+			if(persistent.chapter == ch_nr){
+				l1.set_text(""+persistent.chapter)
+
+				if(chapter.step <= (st_nr+1)){
+					l2.set_text(""+chapter.step)
+				}
+				else {
+					gui.add_message("Error1 here: CH "+persistent.chapter +" : ST "+chapter.step)
+
+					//Se se regresa al valor anterior en caso de error
+					persistent.status.step = st_nr
+					persistent.step = st_nr
+					chapter.step = st_nr
+				}
+			}
+			else {
+				if(chapter.step != 1){
+					gui.add_message("Error2 here: CH "+persistent.chapter +" : ST "+chapter.step)
+
+					//Se restauran todos en caso de error
+					persistent.status.step = 1
+					persistent.step = 1
+					chapter.step = 1
+				}
+				l1.set_text(""+persistent.chapter)
+				l2.set_text("1")
+			}
+		}
+	}
+}
+
 function is_scenario_completed(pl)
 {
+	//labels_text_debug()
 	//gui.add_message(""+glsw[0]+"")
-	//gui.add_message("Persis Step:"+persistent.step+" Status Step:"+persistent.status.step+"  Step:"+chapter.step+"")				
+	//gui.add_message("!!!!!"+persistent.step+" ch a "+st_nr[0]+"  !!!!! "+persistent.status.step+"  -- "+chapter.step+"")				
 	if (pl != 0) return 0			// other player get only 0%
+
 	if (currt_pos){
 		local t = tile_x(currt_pos.x,currt_pos.y,currt_pos.z)
 		local build = t.find_object(mo_building)
@@ -408,36 +464,34 @@ function is_scenario_completed(pl)
 		else fail_num--
 	}
 	if(gui_delay){
-		//gui.open_info_win_at("goal")
+		gui.open_info_win_at("goal")
 		gui_delay = false
 	}
+
 	//gui.add_message(""+current_cov+"  "+gall_cov+"")
 	//Para los convoys ---------------------
-	if (gall_cov != current_cov) chapter.checks_convoy_removed(pl)
-	gall_cov = checks_all_convoys()
-	correct_cov = chapter.correct_cov_list()
+	if (gall_cov != current_cov){
+		basic_convoys().checks_convoy_removed(pl)
+	}
+	
+	gall_cov = basic_convoys().checks_all_convoys()
+	if(!correct_cov && gall_cov==gcov_nr){
+		load_conv_ch(persistent.status.chapter, persistent.status.step, pl)
+	}
+	correct_cov = basic_convoys().correct_cov_list()
 	persistent.gall_cov = gall_cov
 
-	//gui.add_message("gall_cov-> "+gall_cov+":: gcov_nr-> "+gcov_nr+":: current_cov-> "+current_cov+":: correct_cov-> "+correct_cov+"::gcov_id-> "+gcov_id+"::"+cov_sw+"")
-	if (correct_cov) {
-		if (persistent.status.chapter > persistent.chapter){
-			load_chapter2(persistent.status.chapter,pl)
-		}
-		if (persistent.status.step != persistent.step){
-			chapter.step_nr(persistent.status.step)
-		}
-	}
-	else{
+//gui.add_message("gall_cov-> "+gall_cov+":: gcov_nr-> "+gcov_nr+":: current_cov-> "+current_cov+":: Step-> "+chapter.step+":: PersisStep-> "+persistent.step+":: Status->"+persistent.status.step+"")
+
+	if(!correct_cov) {
 		if (!resul_version.pak || !resul_version.st)
 			chapter.step = 1
 
 		else chapter.step = persistent.step
-
 		chapter.start_chapter()
-		return 0
+		return 1
 	}
 
-	//if(cov_delay>0) cov_delay--
 	chapter.step = persistent.step
 	local percentage = chapter.is_chapter_completed(pl)
 	gl_percentage = percentage
@@ -449,6 +503,8 @@ function is_scenario_completed(pl)
 		text.cname = translate(""+chapter.chapter_name+"")
 
 		persistent.chapter++
+		persistent.status.chapter++
+
 		load_chapter(persistent.chapter, pl)
 		chapter.chap_nr = persistent.chapter
 		percentage = chapter.is_chapter_completed(pl)
@@ -467,7 +523,6 @@ function is_scenario_completed(pl)
 	return percentage
 }
 
-
 function is_work_allowed_here(pl, tool_id, pos)
 {	
 	local pause = debug.is_paused()
@@ -475,12 +530,16 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 	//return tile_x(pos.x,pos.y,pos.z).find_object(mo_way).get_dirs()
 	if (pl != 0) return null
+
+	if(scr_jump){
+		return null
+	}
+	local result = translate("Action not allowed")
 	if (correct_cov){
-		local result = chapter.is_work_allowed_here(pl, tool_id, pos)
+		result = chapter.is_work_allowed_here(pl, tool_id, pos)
 		return fail_count_message(result, tool_id)
 	}
 	else {
-		local result = translate("Action not allowed")
 		if (tool_id==4108 || tool_id==4096)
 			result = null
 	}
@@ -489,20 +548,20 @@ function is_work_allowed_here(pl, tool_id, pos)
 
 function fail_count_message(result, tool_id)
 {
-	//gui.add_message(result+" "+fail_count)
+	//gui.add_message(result+" ")
 	//Desabilitado
-	/*if(tool_id != tool_build_tunnel && result != ""){
+	//if(tool_id != tool_build_tunnel && result != ""){
 		//gui.add_message("fail_count: "+fail_count + "Tool: "+tool_id)
 		if (fail_count && result != null){
 			fail_count++
 			if (fail_count >= fail_num){
-				fail_count = null
-				return translate("Are you lost ?, see the instructions shown below.")
+				true//fail_count = null
+				//return translate("Are you lost ?, see the instructions shown below.")
 			}
 		}
 		else if (result == null)
-		    fail_count = 1
-	}*/
+			true//fail_count = 1
+	//}
 	return result
 }
 
@@ -529,7 +588,7 @@ function is_convoy_allowed(pl, convoy, depot)
 	if (pause) return translate("Advance is not allowed with the game paused.")
 
 	local result = null
-	chapter.checks_convoy_removed(pl)
+	basic_convoys().checks_convoy_removed(pl)
 	//gui.add_message("Run ->"+current_cov+","+correct_cov+" - "+gall_cov+"")
 	if (pl != 0) return null
 	result = chapter.is_convoy_allowed(pl, convoy, depot)
@@ -573,6 +632,12 @@ convoy_x._save <- function()
 
 function resume_game()
 {
+	basic_convoys().set_convoy_limit()
+	//Mark all text labels
+	foreach(label in world.get_label_list()){
+		if(label.get_owner().nr == 1)
+			label.mark()
+	}
 	//Check version and pakset name
 	resul_version = string_analyzer()
 
@@ -589,13 +654,10 @@ function resume_game()
 	cov_save  = data_save().convoys_save()
 
 //-------------------------------------------------------
-
-	point = persistent.point
 	gcov_nr = persistent.gcov_nr
 	gall_cov = persistent.gall_cov
 	current_cov = persistent.current_cov
 	gcov_id = persistent.gcov_id
-	gsignal = persistent.signal
 	sigcoord = persistent.sigcoord
 	id_save = persistent.id_save
 	ignore_save = persistent.ignore_save
@@ -628,21 +690,6 @@ function resume_game()
 	select_option_halt = tile_x( 0, 0, select_option.z ).find_object(mo_label)
 
     chapter.start_chapter()
-}
-
-function checks_all_convoys()
-{
-	local cov_list = world.get_convoy_list()
-	local cov_nr = 0
-	foreach(cov in cov_list) {
-		local id = cov.id
-		if (id>gcov_id)
-			gcov_id = id
-
-		if (!cov.is_in_depot() && !ignore_save[id])
-			cov_nr++	
-	}	
-	return cov_nr
 }
 
 function get_line_name(halt)
