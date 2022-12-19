@@ -34,7 +34,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 	// Step 1 =====================================================================================
 	// Pista de aterrizaje --------------------------
-	c1_track = {a = coord(107,17), b = coord(107,21), dir = 2}
+	c1_track = {a = coord(107,17), b = coord(107,21), dir = 2}	//Inicio, Fin de la via y direccion(fullway)
 	c1_start = coord(107,17)
 	c1_is_way = null
 	obj1_way_name = "runway_modern"

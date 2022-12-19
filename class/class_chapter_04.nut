@@ -50,7 +50,7 @@ class tutorial.chapter_04 extends basic_chapter
 
 	//Step 5 =====================================================================================
 	//Para el canal acuatico
-	c1_way = {a = coord3d(84,43,-1), b = coord3d(80,33,-1)}
+	c1_way = {a = coord3d(84,43,-1), b = coord3d(80,33,-1), dir = 6}	//Inicio, Fin de la via y direccion(fullway)
 	c1_way_lim = {a = coord(78,32), b = coord(84,46)}
 
 	//Para Astillero

@@ -42,7 +42,7 @@ class tutorial.chapter_03 extends basic_chapter
 	st1_way_lim = {a = coord(67,34), b = coord(67,40)}					//Limites de la via para la estacion
 	bord1_lim = {a = coord(50,27), b = coord(71,34)}					//Marca area con "X"
 	label1_lim = coord(67,34)											//Indica el final de un tramo
-	c_way1 = {a = coord3d(67,40,-1), b = coord3d(53,27,-1), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_way1 = {a = coord3d(67,40,-1), b = coord3d(53,27,-1), dir = 2}	//Inicio, Fin de la via y direcion (fullway)
 
 	//Estaciones del Productor
 	st1_list = [coord(67,40), coord(67,39), coord(67,38), coord(67,37)]
@@ -54,7 +54,7 @@ class tutorial.chapter_03 extends basic_chapter
 
 	//Para el tunel
 	//-------------------------------------------------------------------------------------------
-	c_way2 = {a = coord3d(53,26,-1), b = coord3d(53,15,-1), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_way2 = {a = coord3d(53,26,-1), b = coord3d(53,15,-1), dir = 0}	//Inicio, Fin de la via y direcion (fullway)
 	tun1_lim = {a = coord(53,15), b = coord(53,27)}						//Limites para construir el tunel
 	//-------------------------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ class tutorial.chapter_03 extends basic_chapter
 	st2_way_lim = {a = coord(35,6), b = coord(35,9)}				//Limites de la via para la estacion
 	bord2_lim = {a = coord(31,10), b = coord(55,16)}				//Marca area con "X"
 	label2_lim = coord(35,10)										//Indica el final de un tramo
-	c_way3 = {a = coord3d(53,15,-1), b = coord3d(35,6,1), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_way3 = {a = coord3d(53,15,-1), b = coord3d(35,6,1), dir = 2}	//Inicio, Fin de la via y direcion (fullway)
 
 	//Estaciones de la Fabrica
 	st2_list = [coord(35,6), coord(35,7), coord(35,8), coord(35,9)]
@@ -91,7 +91,7 @@ class tutorial.chapter_03 extends basic_chapter
 	st3_way_lim = {a = coord(38,2), b = coord(44,2)}				//Limites de la via para la estacion
 	bord3_lim = {a = coord(44,0), b = coord(81,19)}					//Marca area con "X"
 	label3_lim = coord(44,2)										//Indica el final de un tramo
-	c_way4 = {a = coord3d(44,2,1), b = coord3d(68,18,2), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_way4 = {a = coord3d(44,2,1), b = coord3d(68,18,2), dir = 5}	//Inicio, Fin de la via y direcion (fullway)
 
 	//Estaciones de la Fabrica
 	st3_list = [coord(38,2), coord(39,2), coord(40,2), coord(41,2)]
@@ -143,7 +143,7 @@ class tutorial.chapter_03 extends basic_chapter
 	//Subterraneo
 	//------------------------------------------------------------------------------------------
 	c_tunn2_lim = {a = coord(90,19), b = coord(93,3)}
-	c_tunn1 = {a = coord3d(92,18,0), b = coord3d(92,3,-3), dir = 3}	//Inicio, Fin de la via y direcion (fullway)
+	c_tunn1 = {a = coord3d(92,18,0), b = coord3d(92,3,-3), dir = 2}	//Inicio, Fin de la via y direcion (fullway)
 
 	dir_1 = {s = 4, r = 1 }		//Direccion de la slope y Way ribi
 	layer_lvl = 0 
@@ -153,8 +153,10 @@ class tutorial.chapter_03 extends basic_chapter
 	//------------------------------------------------------------------------------------------
 
 	//Step 9 =====================================================================================
-	c_way_list1 = 	[	{a = coord3d(90,20,0), b = coord3d(32,20,0) }, {a = coord3d(32,21,0), b = coord3d(90,21,0) }, 
-						{a = coord3d(30,35,0), b = coord3d(30,103,0) }, {a = coord3d(31,103,0), b = coord3d(31,34,0)}
+	c_way_list1 = 	[	{a = coord3d(90,20,0), b = coord3d(32,20,0), tunn = false},
+						{a = coord3d(32,21,0), b = coord3d(90,21,0), tunn = false}, 
+						{a = coord3d(30,35,0), b = coord3d(30,103,0), tunn = false}, 
+						{a = coord3d(31,103,0), b = coord3d(31,34,0), tunn = false}
 					]
 
 	c_way_lim1 =	[	{a = coord(32,20), b = coord(90,20)}, {a = coord(32,21), b = coord(90,21)},
@@ -162,12 +164,12 @@ class tutorial.chapter_03 extends basic_chapter
 					]
 	
 	//Para las señales de paso
-	sign_list = [	{c = coord3d(92,82,1), ribi=4}, {c = coord3d(93,82,1), ribi=1}, 
-					{c = coord3d(92,108,8), ribi=4}, {c = coord3d(93,108,8), ribi=1},
-					{c = coord3d(92,148,7), ribi=4}, {c = coord3d(93,148,7), ribi=1},
-					{c = coord3d(92,165,7), ribi=4}, {c = coord3d(93,165,7), ribi=1}, 
+	sign_list =	[
+					{c =coord3d(74,20,0), ribi=8}, {c =coord3d(74,21,0), ribi=2}, {c =coord3d(58,20,0), ribi=8},
+					{c =coord3d(58,21,0), ribi=2}, {c =coord3d(37,20,0), ribi=8}, {c =coord3d(37,21,0), ribi=2}, 
+					{c =coord3d(30,49,0), ribi=4}, {c =coord3d(31,49,0), ribi=1}, {c =coord3d(30,67,0), ribi=4}, 
+					{c =coord3d(31,67,0), ribi=1}, {c =coord3d(30,97,0), ribi=4}, {c =coord3d(31,97,0), ribi=1}
 				]
-
 	//Step 10 =====================================================================================
 	dir_list = [0,3,6,5,5,2,2,6]
 
@@ -509,8 +511,8 @@ class tutorial.chapter_03 extends basic_chapter
 					text.tx = ttext("<em>[1/2]</em>")
 					local w_nr = 0
 					for(local j=0;j<c_way_lim1.len();j++){
-						local c_a = coord(c_way_list1[j].a.x, c_way_list1[j].a.y)//c_way_lim1[j].a
-						local c_b = coord(c_way_list1[j].b.x, c_way_list1[j].b.y)//c_way_lim1[j].b
+						local c_a = c_way_lim1[j].a
+						local c_b = c_way_lim1[j].b
 						if (glsw[j]==0){
 							local link1 = "<a href=\"("+c_a.x+","+c_a.y+")\">("+c_a.tostring()+")</a>"
 							local link2 = " --> <a href=\"("+c_b.x+","+c_b.y+")\">("+c_b.tostring()+")</a><br>"
@@ -533,8 +535,9 @@ class tutorial.chapter_03 extends basic_chapter
 					text = ttextfile("chapter_03/09_2-2.txt")
 					text.tx = ttext("<em>[2/2]</em>")
 					local sigtxt = ""
-					for(local j=0;j<signr;j++){
-						local c = signal[j].coor
+					local list = sign_list
+					for(local j=0;j<list.len();j++){
+						local c = list[j].c
 						if (glsw[j]==0){
 							local link = "<a href=\"("+c.x+","+c.y+")\">("+c.tostring()+")</a><br>"
 							sigtxt += ttext("<st>" + format(translate("Signal Nr.%d") + "</st> %s", j+1, link))
@@ -763,7 +766,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local opt = 0
 					local coora = coord3d(c_way1.a.x, c_way1.a.y, c_way1.a.z)
 					local coorb = coord3d(c_way1.b.x, c_way1.b.y, c_way1.b.z)
-					local dir = 2
+					local dir = c_way1.dir
 					local obj = false
 					local wt = wt_rail
 
@@ -819,9 +822,10 @@ class tutorial.chapter_03 extends basic_chapter
 
 					local coora = coord3d(c_way2.a.x, c_way2.a.y, c_way2.a.z)
 					local coorb = coord3d(c_way2.b.x, c_way2.b.y, c_way2.b.z)
+					local dir = c_way2.dir
 					local obj = false
 					local tunnel = true
-					r_way = get_fullway(coora, coorb, 0, obj, tunnel)
+					r_way = get_fullway(coora, coorb, dir, obj, tunnel)
 					if (r_way.r){
 						pot3=1
 					}
@@ -860,7 +864,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local opt = 0
 					local coora = coord3d(c_way3.a.x, c_way3.a.y, c_way3.a.z)
 					local coorb = coord3d(c_way3.b.x, c_way3.b.y, c_way3.b.z)
-					local dir = 2
+					local dir = c_way3.dir
 					local obj = false
 					wayend = coorb
 
@@ -1032,7 +1036,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local coora = coord3d(c_way4.a.x, c_way4.a.y, c_way4.a.z)
 					local coorb = coord3d(c_way4.b.x, c_way4.b.y, c_way4.b.z)
 					local obj = false
-					local dir = 5
+					local dir = c_way4.dir
 
 					wayend = coorb
 
@@ -1094,7 +1098,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local coora = coord3d(c_way5.a.x, c_way5.a.y, c_way5.a.z)
 					local coorb = coord3d(c_way5.b.x, c_way5.b.y, c_way5.b.z)
 					local obj = false
-					local dir = 3
+					local dir = c_way5.dir
 					wayend = coorb				
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
@@ -1217,7 +1221,7 @@ class tutorial.chapter_03 extends basic_chapter
 					local coorb = coord3d(c_tunn1.b.x, c_tunn1.b.y, c_tunn1.b.z)
 					local obj = false
 					local tunnel = true
-					local dir = 2
+					local dir = c_tunn1.dir
 					r_way = get_fullway(coora, coorb, dir, obj, tunnel)
 					if (r_way.r){
 						t_label.remove_object(player_x(1), mo_label)						
@@ -1269,17 +1273,17 @@ class tutorial.chapter_03 extends basic_chapter
 							local tile_a = my_tile(c_way_lim1[j].a)
 							local tile_b = my_tile(c_way_lim1[j].b)
 
-							if (!tile_a.find_object(mo_label))
+							if (!tile_a.find_object(mo_label) && !tunn)
 								label_x.create(c_way_lim1[j].a, player_x(1), translate("Build Rails form here"))
 
-							if (!tile_b.find_object(mo_label))
+							if (!tile_b.find_object(mo_label) && !tunn)
 								label_x.create(c_way_lim1[j].b, player_x(1), translate("Build Rails form here"))
 							
 							local coora = coord3d(c_way_list1[j].a.x, c_way_list1[j].a.y, c_way_list1[j].a.z)
 							local coorb = coord3d(c_way_list1[j].b.x, c_way_list1[j].b.y, c_way_list1[j].b.z)
-							local obj = false
+							local tunn = c_way_list1[j].tunn
 							local dir = get_dir_start(coora)
-							r_way = get_fullway(coora, coorb, dir, obj)
+							r_way = get_fullway(coora, coorb, dir, tunn)
 							if (r_way.r){
 								tile_a.remove_object(player_x(1), mo_label)
 								tile_b.remove_object(player_x(1), mo_label)
@@ -1295,21 +1299,25 @@ class tutorial.chapter_03 extends basic_chapter
 		            }
 				}
 				else if (pot0==1 && pot1==0){
-					local sign_nr=0
-					for(local j=0;j<signr;j++){
-						local tile = tile_x(signal[j].coor.x, signal[j].coor.y, signal[j].coor.z)
-						if (!tile.find_object(mo_signal) && !tile.find_object(mo_roadsign)){
-							label_x.create(signal[j].coor, player_x(1), translate("Place Singnal here!."))
-							tile.find_object(mo_way).mark()
+					local sign_nr = 0
+					for(local j=0;j<sign_list.len();j++){
+						local c sign_list[j].c
+						local t = tile_x(c.x, c.y, c.z)
+						if(sigcoord){
+							t.find_object(mo_way).mark()
+						}
+						if ((!t.find_object(mo_signal) && !t.find_object(mo_roadsign) )){
+							label_x.create(c, player_x(1), translate("Place Singnal here!."))
+							t.find_object(mo_way).mark()
 						}
 						else{
-							local ribi = way_x(signal[j].coor.x, signal[j].coor.y, signal[j].coor.z).get_dirs_masked()
-							tile.remove_object(player_x(1), mo_label)			
-							if (ribi==signal[j].ribi){
-								tile.find_object(mo_way).unmark()
+							local ribi = way_x(c.x, c.y, c.z).get_dirs_masked()
+							t.remove_object(player_x(1), mo_label)			
+							if (ribi == sign_list[j].ribi){
+								t.find_object(mo_way).unmark()
 								sign_nr++
-								glsw[j]=1
-								if (sign_nr==signr){
+								glsw[j] = 1
+								if (sign_nr == sign_list.len()){
 									this.next_step()
 								}
 							}
@@ -1331,8 +1339,8 @@ class tutorial.chapter_03 extends basic_chapter
 							local coora = coord3d(c_cate_list1[j].a.x, c_cate_list1[j].a.y, c_cate_list1[j].a.z)
 							local coorb = coord3d(c_cate_list1[j].b.x, c_cate_list1[j].b.y, c_cate_list1[j].b.z)
 							local elect = mo_wayobj
-							local dir = dir_list[j]
-							local tunn = true
+							local dir = c_cate_list1[j].dir
+							local tunn = c_cate_list1[j].tunn
 							
 							r_way = get_fullway(coora, coorb, dir, elect, tunn)
 							if (r_way.r){
@@ -1931,8 +1939,8 @@ class tutorial.chapter_03 extends basic_chapter
 					//Elimina las señales
 					if (tool_id==tool_remover){
 						if (sign || roadsign){
-							for(local j=0;j<signr;j++){
-								if (pos.x==signal[j].coor.x && pos.y==signal[j].coor.y){
+							for(local j=0;j<sign_list.len();j++){
+								if (pos.x == sign_list[j].c.x && pos.y==sign_list[j].c.y){
 									backward_glsw(j)
 									return null
 								}
@@ -1942,30 +1950,29 @@ class tutorial.chapter_03 extends basic_chapter
 							return translate("Only delete signals.")							
 					}
 					//Construye señales de paso					
-					if (tool_id==4116){
+					if (tool_id == 4116){
 						if (!sign){
-							for(local j=0;j<signr;j++){
-								local tile = tile_x(signal[j].coor.x, signal[j].coor.y, signal[j].coor.z)
+							for(local j=0;j<sign_list.len();j++){
+								local tile = tile_x(sign_list[j].c.x, sign_list[j].c.y, sign_list[j].c.z)
 								local r
 								if (tile.find_object(mo_signal)){
-									r = get_signa(signal[j].coor,j,signal[j].ribi)
-									if (r==null)
-										return translate("The signal does not point in the correct direction")+" ("+signal[j].coor.tostring()+")."
+									r = get_signa(tile, j, sign_list[j].ribi)
+									if (r == null)
+										return translate("The signal does not point in the correct direction")+" ("+sign_list[j].c.tostring()+")."
 								}
 								else
-									result = translate("Place a block signal here")+" ("+signal[j].coor.tostring()+")."
+									result = translate("Place a block signal here")+" ("+sign_list[j].c.tostring()+")."
 
 								if (tile.find_object(mo_roadsign))
-									return translate("It must be a block signal!")+" ("+signal[j].coor.tostring()+")."
+									return translate("It must be a block signal!")+" ("+sign_list[j].c.tostring()+")."
 							}	
 						}
-						for(local j=0;j<signr;j++){
-							local tile = tile_x(signal[j].coor.x, signal[j].coor.y, signal[j].coor.z)
+						for(local j=0;j<sign_list.len();j++){
+							local tile = tile_x(sign_list[j].c.x, sign_list[j].c.y, sign_list[j].c.z)
 							if (tile.find_object(mo_roadsign))
-								return translate("It must be a block signal!")+" ("+signal[j].coor.tostring()+")."
-							if ((pos.x==signal[j].coor.x)&&(pos.y==signal[j].coor.y)){
-								if (label)point[0]++
-								return get_signa(pos,j,signal[j].ribi)
+								return translate("It must be a block signal!")+" ("+sign_list[j].c.tostring()+")."
+							if ((pos.x == sign_list[j].c.x) && (pos.y == sign_list[j].c.y)){
+								return get_signa(t, j, sign_list[j].ribi)
 							}
 						}
 						return result

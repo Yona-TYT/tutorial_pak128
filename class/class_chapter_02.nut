@@ -67,7 +67,7 @@ class tutorial.chapter_02 extends basic_chapter
 	brdg1 = coord(87,29)
 	brdg2 = coord(84,29)
 
-	c_brdg1 = {a = coord3d(87,29,-1), b = coord3d(83,29,0)}
+	c_brdg1 = {a = coord3d(87,29,-1), b = coord3d(83,29,0), dir = 6}		//Inicio, Fin de la via y direccion(fullway)
 	c_brdg_limi1 = {a = coord(83,29), b = coord(88,29)}
 
 	// Step 6 =====================================================================================
@@ -86,7 +86,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 	cty2 = {c = coord(93,5), name = ""}
 	c_way_limi1 = {a = coord(94,7), b = coord(100,27)}
-	c_way1 = {a = coord3d(97,7,0), b = coord3d(97,26,0)}
+	c_way1 = {a = coord3d(97,7,0), b = coord3d(97,26,0), dir = 3}		//Inicio, Fin de la via y direccion(fullway)
 	c_st0 = coord(93,32)
 
 	sch_list3 = [coord(93,32), coord(88,4), coord(89,9), coord(94,4), coord(94,9)]
@@ -535,7 +535,7 @@ class tutorial.chapter_02 extends basic_chapter
 					//Comprueba la conexion de la via
 					local coora = coord3d(c_brdg1.a.x, c_brdg1.a.y, c_brdg1.a.z)
 					local coorb = coord3d(c_brdg1.b.x, c_brdg1.b.y, c_brdg1.b.z)
-					local dir = 6
+					local dir = c_brdg1.dir
 					local obj = false		
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
@@ -552,10 +552,6 @@ class tutorial.chapter_02 extends basic_chapter
 				break
 
 			case 6:
-
-				//gui.add_message(""+current_cov+"  "+ch2_cov_lim2.b+"")
-				//if (gcov_nr < 1 && gcov_nr>3)
-					//return 0
                 local c_dep = this.my_tile(c_dep)
                 local line_name = line2_name //"Test 2"
                 set_convoy_schedule(pl,c_dep, gl_wt, line_name)
@@ -630,7 +626,7 @@ class tutorial.chapter_02 extends basic_chapter
 						//Comprueba la conexion de la via
 						local coora=coord3d(c_way1.a.x,c_way1.a.y,c_way1.a.z)
 						local coorb=coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
-						local dir = 3
+						local dir = c_way1.dir
 						local obj = false		
 						r_way = get_fullway(coora, coorb, dir, obj)
 

@@ -37,7 +37,7 @@ class tutorial.chapter_05 extends basic_chapter
 	//Para la carretera
 	//------------------------------------------------------------------------------------------
 	c_way_lim1 = {a = coord(70,50), b = coord(80,76)}
-	c_way1 = {a = coord3d(77,76,0), b = coord3d(75,50,-1), dir = 5}	//Inicio, Fin de la via y direccion(fullway)
+	c_way1 = {a = coord3d(77,76,0), b = coord3d(75,50,-1), dir = 2}	//Inicio, Fin de la via y direccion(fullway)
 
 	//Limites del deposito y rieles
 	//--------------------------------------------------------------------------------------------
@@ -361,7 +361,7 @@ class tutorial.chapter_05 extends basic_chapter
 
 					//Comprueba la conexion de la via
 					local obj = false
-					local dir = 2		
+					local dir = c_way1.dir		
 					r_way = get_fullway(coora, coorb, dir, obj)
 
 					if (r_way.r){
