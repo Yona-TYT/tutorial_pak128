@@ -17,10 +17,10 @@ cv_list <-	[
 				{stp = [4,5,7], cov = [5,2,1], idx = 0}
 
 				//Chapter_05: [Step..], [Cov_nr..], Index --------------
-				{stp = [2,4,4,5], cov = [15,2,1,1], idx = 0}
+				{stp = [2,4,4], cov = [15,2,1], idx = 0}
 
 				//Chapter_06: [Step..], [Cov_nr..], Index --------------
-				{stp = [2,3], cov = [1,4], idx = 0}
+				{stp = [2,3,4], cov = [1,1,4], idx = 0}
 			]
 
 //Generate list with convoy limits

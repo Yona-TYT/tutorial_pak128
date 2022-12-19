@@ -497,7 +497,8 @@ class tutorial.chapter_04 extends basic_chapter
 		}
 		local result = translate("Action not allowed")		// null is equivalent to 'allowed'
 		//glbpos = coord3d(pos.x,pos.y,pos.y)
-		gltool = tool_id			
+		gltool = tool_id
+		/*		
 		switch (this.step) {
 			case 1:
 				if (tool_id == 4096){
@@ -623,6 +624,7 @@ class tutorial.chapter_04 extends basic_chapter
 				}
 				break
 		}
+		*/
 		if (tool_id == 4096){
 			if (label && label.get_text()=="X")
 				return translate("Indicates the limits for using construction tools")+" ("+pos.tostring()+")."		
@@ -964,32 +966,33 @@ class tutorial.chapter_04 extends basic_chapter
 				break;
 
 			case 7:
-				local c_depot = my_tile(c_dep2)
-				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
-				local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
+				if (current_cov> ch4_cov_lim3.a && current_cov< ch4_cov_lim3.b){
+					local c_depot = my_tile(c_dep2)
+					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
+					local depot = depot_x(c_depot.x, c_depot.y, c_depot.z)
 
-				local sched = schedule_x(gl_wt, [])
-				local t_list = is_water_entry(sch_list3)
-				for(local j =0;j<t_list.len();j++){
-					if(j == 0)
-						sched.entries.append(schedule_entry_x(t_list[j], ship2_load, ship2_wait))
-					else
-						sched.entries.append(schedule_entry_x(t_list[j], 0, 0))
+					local sched = schedule_x(gl_wt, [])
+					local t_list = is_water_entry(sch_list3)
+					for(local j =0;j<t_list.len();j++){
+						if(j == 0)
+							sched.entries.append(schedule_entry_x(t_list[j], ship2_load, ship2_wait))
+						else
+							sched.entries.append(schedule_entry_x(t_list[j], 0, 0))
+					}
+					local c_line = comm_get_line(player, gl_wt, sched)
+
+					local good_nr = good_desc_x(good_alias.passa).get_catg_index() //Passengers
+					local name = ship2_name_obj
+					local cov_nr = 1  //Max convoys nr in depot
+					if (!comm_set_convoy(cov_nr, c_depot, name))
+						return 0
+
+					local conv = depot.get_convoy_list()
+					conv[0].set_line(player, c_line)
+					comm_start_convoy(player, conv[0], depot)
 				}
-				local c_line = comm_get_line(player, gl_wt, sched)
-
-				local good_nr = good_desc_x(good_alias.passa).get_catg_index() //Passengers
-				local name = ship2_name_obj
-				local cov_nr = 1  //Max convoys nr in depot
-				if (!comm_set_convoy(cov_nr, c_depot, name))
-					return 0
-
-				local conv = depot.get_convoy_list()
-				conv[0].set_line(player, c_line)
-				comm_start_convoy(player, conv[0], depot)
-			}
-			return null
-			break;
+				return null
+				break;
 		}
 		return null
 	}

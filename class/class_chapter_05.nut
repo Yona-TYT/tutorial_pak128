@@ -28,7 +28,7 @@ class tutorial.chapter_05 extends basic_chapter
 	fab_list =	[
 					{c = coord(36,4), name = ""/*auto started*/, c_list = null/*auto started*/},
 					{c = coord(95,39), name = ""/*auto started*/, c_list = null/*auto started*/},
-					{c = coord(76,26, name = ""/*auto started*/, c_list = null/*auto started*/},
+					{c = coord(76,26), name = ""/*auto started*/, c_list = null/*auto started*/},
 					{c = coord(76,77), name = ""/*auto started*/, c_list = null/*auto started*/},
 					{c = coord(74,47), name = ""/*auto started*/, c_list = null/*auto started*/}
 				]
@@ -111,7 +111,7 @@ class tutorial.chapter_05 extends basic_chapter
 	{
 		rules.clear()
 		set_all_rules(0)
-
+		
 		local lim_idx = cv_list[(persistent.chapter - 2)].idx
 		ch5_cov_lim1 = {a = cv_lim[lim_idx].a, b = cv_lim[lim_idx].b}
 		ch5_cov_lim2 = {a = cv_lim[lim_idx+1].a, b = cv_lim[lim_idx+1].b}
@@ -151,7 +151,6 @@ class tutorial.chapter_05 extends basic_chapter
 			c_list = sch_list3
 			start_sch_tmpsw(pl,c_dep, c_list)
 		}
-
 		return 0
 	}
 
@@ -160,7 +159,7 @@ class tutorial.chapter_05 extends basic_chapter
 		local ok_tx =  translate("Ok")
 		local trf_name = translate("Build drain")    //Aufspanntransformator 
 		local toolbar = translate("SPECIALTOOLS")
-		
+
 		switch (this.step) {
 			case 1:
 			break
@@ -629,8 +628,7 @@ class tutorial.chapter_05 extends basic_chapter
 						return is_stop_allowed(result, nr, c_list, pos)
 					}
 				}
-			break;
-
+				break;
 			//Conectando los transformadores
 			case 3:
                 if (pot0==0){
@@ -716,9 +714,9 @@ class tutorial.chapter_05 extends basic_chapter
 						return is_stop_allowed_ex(result, siz, c_list, pos, wt)	
 					}
                 }
-			break
+				break
 			case 5:
-			break
+				break
 
 		}
 		if (tool_id == 4096){

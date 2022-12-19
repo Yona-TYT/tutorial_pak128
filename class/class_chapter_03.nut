@@ -1301,7 +1301,7 @@ class tutorial.chapter_03 extends basic_chapter
 				else if (pot0==1 && pot1==0){
 					local sign_nr = 0
 					for(local j=0;j<sign_list.len();j++){
-						local c sign_list[j].c
+						local c = sign_list[j].c
 						local t = tile_x(c.x, c.y, c.z)
 						if(sigcoord){
 							t.find_object(mo_way).mark()
