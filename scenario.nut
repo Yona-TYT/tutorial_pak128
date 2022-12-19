@@ -4,8 +4,8 @@
  
  *  Can NOT be used in network game !
  */
-const version = 1650
-map.file = "tutorial192.sve"
+const version = 1642
+map.file = "tutorial128.sve"
 scenario_name             <- "Tutorial Scenario"
 scenario.short_description = scenario_name
 scenario.author            = "Yona-TYT"
@@ -88,15 +88,15 @@ active_sch_check <- false
 tool_alias  <-	{	inspe = translate("Abfrage"), road= translate("ROADTOOLS"), rail = translate("RAILTOOLS"),
 					ship = translate("SHIPTOOLS"), land = translate("SLOPETOOLS"), spec = translate("SPECIALTOOLS")
 				}
-
+// placeholder for good names in pak128
 good_alias  <-	{	mail = "Post", passa= "Passagiere", goods = "goods_", grain = "grain", coal = "Kohle",
-					flour = "flour", deliv = "Crates Deliverables", oel = "oil", gas = "fuel", wood = "logs", plan = "boards"
+					flour = "flour", deliv = "Crates Deliverables", oel = "Oel", gas = "Gasoline"
 				}
 // table containing all system_types
 all_systemtypes <- [st_flat, st_elevated, st_runway, st_tram]
 
 // Complemento para obtener tiempo de espera
-tick_wait <- 16
+tick_wait <- 8
 
 chapter            <- null			// used later for class
 chapter_max        <- 7				// amount of chapter
@@ -114,7 +114,7 @@ function get_set_name(name)
 }
 
 simu_version <- "122.0.1"
-pak_name <- "pak192.comic"
+pak_name <- "pak128"
 current_st <- "0"
 current_pak <- "pak"
 
