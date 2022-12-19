@@ -9,14 +9,14 @@
 class tutorial.chapter_01 extends basic_chapter
 {
 	chapter_name  = "Getting Started"
-	chapter_coord = coord(96,64)
+	chapter_coord = coord(95,33)
 	startcash     = 500000   				// pl=0 startcash; 0=no reset
 	
 	comm_script = false
 
 	// Step 1 =====================================================================================
-	c_fac = coord(110,71)
-	c_st  = coord(92,77)
+	c_fac = coord(95,39)
+	c_st  = coord(91,26)
 	tx_cty = "This is a town centre"
 	tx_fac = "This is a factory"
 	tx_st = "This is a station"
@@ -26,16 +26,16 @@ class tutorial.chapter_01 extends basic_chapter
 	c_test = coord3d(0,0,1)
 
 	// Step 3 =====================================================================================
-	c_buil1 = coord(92,57)
-	c_buil2 = coord(93,52)
+	c_buil1 = coord(95,33)
+	c_buil2 = coord(95,30)
 	buil1_name = ""	//auto started
 	buil2_name = ""	//auto started
 	buil2_list = null //auto started
 
 	// Step 4 =====================================================================================
 	cit_list = null //auto started
-	city_lim = {a = coord(84,48), b = coord(105,78)}
-	cty1 = {c = coord(94,69), name = ""}
+	city_lim = {a = coord(83,21), b = coord(103,42)}
+	cty1 = {c = coord(92,33), name = ""}
 	
 	function start_chapter()  //Inicia solo una vez por capitulo
 	{
