@@ -76,7 +76,7 @@ class tutorial.chapter_03 extends basic_chapter
 	//--------------------------------------------------------------------------------------------
 
 	//Step 5 =====================================================================================
-	loc1_name_obj = "EMD-FT_(A)"
+	loc1_name_obj = "Haru_F7A"
 	loc1_tile = 4
 	loc1_load = 100
 	loc1_wait = 0
@@ -738,7 +738,7 @@ class tutorial.chapter_03 extends basic_chapter
 						label_x.create(st1_list[0], player_x(pl), translate("Build Rails form here"))
 					}
 					else
-						tile1.remove_object(player_x(pl), mo_label)
+						tile1.remove_object(player_x(1), mo_label)
 
 					local tile2 = my_tile(limi)
 					if (!tile2.find_object(mo_way)){
@@ -760,7 +760,7 @@ class tutorial.chapter_03 extends basic_chapter
 						local text = "X"
 						label_bord(bord1_lim.a, bord1_lim.b, opt, del, text)
 						
-						tile2.remove_object(player_x(pl), mo_label)		
+						tile2.remove_object(player_x(1), mo_label)		
 					}					
 					local opt = 0
 					local coora = coord3d(c_way1.a.x, c_way1.a.y, c_way1.a.z)
@@ -773,8 +773,8 @@ class tutorial.chapter_03 extends basic_chapter
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
 						tile_x(coora.x, coora.y, coora.z).find_object(mo_way).unmark()
-						tile_x(wayend.x, wayend.y, coorb.z).remove_object(player_x(pl), mo_label)
-						tile1.remove_object(player_x(pl), mo_label)
+						tile_x(wayend.x, wayend.y, coorb.z).remove_object(player_x(1), mo_label)
+						tile1.remove_object(player_x(1), mo_label)
 
 						//elimina el cuadro label
 						local opt = 0
@@ -828,7 +828,7 @@ class tutorial.chapter_03 extends basic_chapter
 						label_x.create(slope1.c, player_x(pl), translate("Place a Tunnel here!."))
 				
 					else {
-						tile1.remove_object(player_x(pl), mo_label)		
+						tile1.remove_object(player_x(1), mo_label)		
 					}
 				}
 				//Segundo tramo de rieles
@@ -836,7 +836,11 @@ class tutorial.chapter_03 extends basic_chapter
 					local limi = label2_lim
 					local tile1 = my_tile(limi)
 					if (r_way.c.y > limi.y){
-						label_x.create(limi, player_x(pl), translate("Build Rails form here"))
+						local label = tile1.find_object(mo_label)
+						if(label)
+							label.set_text(translate("Build Rails form here"))
+						else
+							label_x.create(limi, player_x(pl), translate("Build Rails form here"))
 						//Creea un cuadro label
 						local opt = 0
 						local del = false
@@ -844,7 +848,9 @@ class tutorial.chapter_03 extends basic_chapter
 						label_bord(bord2_lim.a, bord2_lim.b, opt, del, text)
 					}
 					else {
-						tile1.remove_object(player_x(pl), mo_label)
+						local label = tile1.find_object(mo_label)
+						if(label)
+							label.set_text("")
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
@@ -863,16 +869,15 @@ class tutorial.chapter_03 extends basic_chapter
 
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
 						local text = "X"
 						label_bord(bord2_lim.a, bord2_lim.b, opt, del, text)
 
-						tile_x(coorb.x, coorb.y, coorb.z).remove_object(player_x(pl), mo_label)
-						tile1.remove_object(player_x(pl), mo_label)
-						this.next_step()	
+						tile_x(coorb.x, coorb.y, coorb.z).remove_object(player_x(1), mo_label)
+						tile1.remove_object(player_x(1), mo_label)
+						this.next_step()
 					}
 				}
 				return 10
@@ -950,7 +955,7 @@ class tutorial.chapter_03 extends basic_chapter
 							label.set_text(translate("Build Train Depot here!."))
 					}
 					else{
-						tile.remove_object(player_x(pl), mo_label)
+						tile.remove_object(player_x(1), mo_label)
 						pot1=1
 					}				
 				}
@@ -1001,7 +1006,7 @@ class tutorial.chapter_03 extends basic_chapter
 						label_x.create(st3_list[0], player_x(pl), translate("Build Rails form here"))
 					}
 					else
-						tile1.remove_object(player_x(pl), mo_label)
+						tile1.remove_object(player_x(1), mo_label)
 
 					local tile2 = my_tile(limi)
 					if (!tile2.find_object(mo_way)){
@@ -1015,7 +1020,7 @@ class tutorial.chapter_03 extends basic_chapter
 					}
 					if (tile_x(r_way.c.x, r_way.c.y, r_way.c.z).find_object(mo_way) && r_way.c.x>=limi.x){
 
-						tile2.remove_object(player_x(pl), mo_label)
+						tile2.remove_object(player_x(1), mo_label)
 						if (!tile_x(wayend.x, wayend.y, wayend.z).find_object(mo_way))
 							label_x.create(wayend, player_x(pl), translate("Build Rails form here"))
 						//Creea un cuadro label
@@ -1036,7 +1041,7 @@ class tutorial.chapter_03 extends basic_chapter
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
 						tile_x(coora.x, coora.y, coora.z).find_object(mo_way).unmark()
-						tile_x(wayend.x, wayend.y, coorb.z).remove_object(player_x(pl), mo_label)
+						tile_x(wayend.x, wayend.y, coorb.z).remove_object(player_x(1), mo_label)
 
 						//elimina el cuadro label
 						local opt = 0
@@ -1055,7 +1060,7 @@ class tutorial.chapter_03 extends basic_chapter
 						//r_way.c = 	coord3d(tile.x, tile.y, tile.z)
 					}
 					else {
-						tile.remove_object(player_x(pl), mo_label)
+						tile.remove_object(player_x(1), mo_label)
 
 						if (my_tile(c_brge2.b).find_object(mo_bridge)){
 							pot1=1
@@ -1068,7 +1073,11 @@ class tutorial.chapter_03 extends basic_chapter
 					local tile1 = my_tile(limi)
 					local tile2 = my_tile(st4_list[0])
 					if (r_way.c.y < limi.y){
-						label_x.create(limi, player_x(pl), translate("Build Rails form here"))
+						local label = tile1.find_object(mo_label)
+						if(label)
+							label.set_text(translate("Build Rails form here"))
+						else
+							label_x.create(limi, player_x(pl), translate("Build Rails form here"))
 						//Creea un cuadro label
 						local opt = 0
 						local del = false
@@ -1076,7 +1085,9 @@ class tutorial.chapter_03 extends basic_chapter
 						label_bord(bord4_lim.a, bord4_lim.b, opt, del, text)
 					}
 					else {
-						tile1.remove_object(player_x(pl), mo_label)
+						local label = tile1.find_object(mo_label)
+						if(label)
+							label.set_text("")
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
@@ -1095,8 +1106,8 @@ class tutorial.chapter_03 extends basic_chapter
 					wayend = coorb				
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-						tile1.remove_object(player_x(pl), mo_label)
-						tile2.remove_object(player_x(pl), mo_label)
+						tile1.remove_object(player_x(1), mo_label)
+						tile2.remove_object(player_x(1), mo_label)
 						//elimina el cuadro label
 						local opt = 0
 						local del = true
@@ -1105,7 +1116,7 @@ class tutorial.chapter_03 extends basic_chapter
 
 						pot2=1		
 					}
-				}	
+				}
 				
 				//Text label para las estaciones			
 				else if (pot2==1 && pot3==0){
@@ -1176,7 +1187,7 @@ class tutorial.chapter_03 extends basic_chapter
 							label.set_text(translate("Build Train Depot here!."))
 					}
 					else{
-						tile.remove_object(player_x(pl), mo_label)
+						tile.remove_object(player_x(1), mo_label)
 						pot1=1	
 					}
 				}
@@ -1203,7 +1214,7 @@ class tutorial.chapter_03 extends basic_chapter
 						label_x.create(start_tunn, player_x(pl), translate("Place a Tunnel here!."))
 					else{
 						pot0=1
-						t_tunn.remove_object(player_x(pl), mo_label)						
+						t_tunn.remove_object(player_x(1), mo_label)						
 					}							
 				}
 				//Para conectar las dos entradas del tunel
@@ -1358,7 +1369,7 @@ class tutorial.chapter_03 extends basic_chapter
 					if (!tile.find_object(mo_depot_rail))
 						label_x.create(c_dep3, player_x(pl), translate("Build Train Depot here!."))
 					else{
-						tile.remove_object(player_x(pl), mo_label)
+						tile.remove_object(player_x(1), mo_label)
 						pot2=1
 					}
 				}
@@ -2613,7 +2624,7 @@ class tutorial.chapter_03 extends basic_chapter
 				}
 				if (pot2==0){
 					local tile = my_tile(c_dep3)
-					tile.remove_object(player, mo_label) //Elimina texto label
+					tile.remove_object(player_x(1), mo_label) //Elimina texto label
 					local t = command_x(tool_build_depot)
 					local err = t.work(player, tile, sc_dep_name)
 				}
@@ -2819,7 +2830,7 @@ class tutorial.chapter_03 extends basic_chapter
 				//count1=j
 				tile.unmark()
 				way.unmark()
-				tile.remove_object(player_x(pl), mo_label)
+				tile.remove_object(player_x(1), mo_label)
 				if (sw){
 
 					if(j+1 == st_nr) return true
@@ -2836,7 +2847,7 @@ class tutorial.chapter_03 extends basic_chapter
 			else {
 				tile.unmark()
 				way.unmark()
-				tile.remove_object(player_x(pl), mo_label)
+				tile.remove_object(player_x(1), mo_label)
 			}
 		}
 		return false

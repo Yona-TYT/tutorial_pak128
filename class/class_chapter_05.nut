@@ -888,7 +888,7 @@ class tutorial.chapter_05 extends basic_chapter
 
 	function script_text()
 	{
-		local pl = 0
+		local player = player_x(0)
 		switch (this.step) {
 			case 1:
 				if(pot0==0) pot0=1
@@ -901,7 +901,7 @@ class tutorial.chapter_05 extends basic_chapter
 					local coorb = coord3d(c_way1.b.x,c_way1.b.y,c_way1.b.z)
 
 					local t = command_x(tool_build_way)			
-					local err = t.work(player_x(pl), coora, coorb, sc_way_name)
+					local err = t.work(player, coora, coorb, sc_way_name)
 				}
 				if (pot2==0){
 
@@ -910,11 +910,11 @@ class tutorial.chapter_05 extends basic_chapter
 					local t_end = my_tile(c_dep1_lim.b)
 					t_start.remove_object(player_x(1), mo_label)
 					local t = command_x(tool_build_way)
-					local err = t.work(player_x(pl), t_start, t_end, sc_way_name)
+					local err = t.work(player, t_start, t_end, sc_way_name)
 
 					local t_dep = my_tile(c_dep1)
 					t = command_x(tool_build_depot)			
-					err = t.work(player_x(pl), t_dep, sc_dep_name)
+					err = t.work(player, t_dep, sc_dep_name)
 				}
 
 				if (pot1==0){
@@ -923,13 +923,11 @@ class tutorial.chapter_05 extends basic_chapter
 						local way = tile.find_object(mo_way)
 						tile.remove_object(player_x(1), mo_label)
 						local tool = command_x(tool_build_station)			
-						local err = tool.work(player_x(pl), tile, sc_station_name)
+						local err = tool.work(player, tile, sc_station_name)
 					}
 				}
 
 				if (current_cov> ch5_cov_lim1.a && current_cov< ch5_cov_lim1.b){
-
-					local player = player_x(pl)
 					local c_depot = my_tile(c_dep1)
 
 					try {
@@ -981,7 +979,7 @@ class tutorial.chapter_05 extends basic_chapter
                         }
 
 						local tool = command_x(tool_build_transformer)			
-						local err = tool.work(player_x(pl), tile, sc_transf_name)
+						local err = tool.work(player, tile, sc_transf_name)
                     }
                    
                     pot0 = 1
@@ -1003,8 +1001,8 @@ class tutorial.chapter_05 extends basic_chapter
 						local tile_b = my_tile(transf_list[j+1])
 						local tile_c = my_tile(transf_list[j+nr])
 						local tile_d = my_tile(transf_list[(transf_list.len()-j)-(1)])
-						tool.work(player_x(pl), tile_a, tile_c, powline_name)
-						tool.work(player_x(pl), tile_b, tile_d, powline_name)
+						tool.work(player, tile_a, tile_c, powline_name)
+						tool.work(player, tile_b, tile_d, powline_name)
 					}	
            		}
 				return null
@@ -1049,14 +1047,13 @@ class tutorial.chapter_05 extends basic_chapter
 
 							local halt = tile.get_halt()
 							local tool = command_x(tool_build_station)
-							tool.work(player_x(pl), tile, name)
+							tool.work(player, tile, name)
 						}					
 					}
                 }
 				local ok = false
 				if (current_cov> ch5_cov_lim2.a && current_cov< ch5_cov_lim2.b){
 					local wt = wt_road
-					local player = player_x(pl)
 					local c_depot = my_tile(c_dep2)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
@@ -1089,7 +1086,6 @@ class tutorial.chapter_05 extends basic_chapter
 
 				if (ok || (current_cov> ch5_cov_lim3.a && current_cov< ch5_cov_lim3.b)){
 					local wt = wt_water
-					local player = player_x(pl)
 					local c_depot = my_tile(c_dep3)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 

@@ -419,7 +419,7 @@ class tutorial.chapter_02 extends basic_chapter
 						label.set_text(translate("Build a Depot here!."))
 				}
 				else if (next_mark){
-					tile.remove_object(player_x(pl), mo_label)
+					tile.remove_object(player_x(1), mo_label)
 					waydepo.unmark()
 					this.next_step()
 				}
@@ -540,7 +540,7 @@ class tutorial.chapter_02 extends basic_chapter
 					local obj = false		
 					r_way = get_fullway(coora, coorb, dir, obj)
 					if (r_way.r){
-						t_label.remove_object(player_x(pl), mo_label)
+						t_label.remove_object(player_x(1), mo_label)
 						this.next_step()
 						//Crear cuadro label
 						local opt = 0
