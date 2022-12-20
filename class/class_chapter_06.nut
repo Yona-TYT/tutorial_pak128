@@ -109,14 +109,24 @@ class tutorial.chapter_06 extends basic_chapter
 		local pl = 0
 		//Schedule list form current convoy
 		if(this.step == 3){
-            local c_dep = this.my_tile(c_dep2)
+			local c_dep = this.my_tile(c_dep2)
 			local c_list = sch_list2
 			start_sch_tmpsw(pl,c_dep, c_list)
 		}
 		else if(this.step == 4){
-            local c_dep = this.my_tile(c_dep3)
+			local t = this.my_tile(c_dep3)
 			local c_list = sch_list3
-			start_sch_tmpsw(pl,c_dep, c_list)
+			start_sch_tmpsw(pl, t, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 		return 0
 	}

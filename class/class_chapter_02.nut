@@ -127,22 +127,49 @@ class tutorial.chapter_02 extends basic_chapter
 
 		local pl = 0
 		//Schedule list form current convoy
+		local t = this.my_tile(c_dep)
 		if(this.step == 4){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list1
-			start_sch_tmpsw(pl,c_dep, c_list)		
+			start_sch_tmpsw(pl, t, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 		else if(this.step == 6){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list2
 			start_sch_tmpsw(pl,c_dep, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
 		else if(this.step == 7){
-            local c_dep = this.my_tile(c_dep)
 			local c_list = sch_list3
-			start_sch_tmpsw(pl,c_dep, c_list)
+			start_sch_tmpsw(pl, t, c_list)
+			local depot = t.find_object(mo_depot_road)
+			if(depot) {
+				local cov_list = depot.get_convoy_list()		//Lista de vehiculos en el deposito
+				local convoy = convoy_x(gcov_id)
+				if (cov_list.len()>=1){
+					convoy = cov_list[0]
+				}
+				local all_result = checks_convoy_schedule(convoy, pl)
+				sch_cov_correct = all_result.res == null ? true : false
+			}
 		}
-
 	}
 
 	function set_goal_text(text){
@@ -238,7 +265,7 @@ class tutorial.chapter_02 extends basic_chapter
 
 				break
 			case 7:
-				if (!cov_sw){
+				if (!correct_cov){
 					local a = 3
 					local b = 3
 					text = ttextfile("chapter_02/07_"+a+"-"+b+".txt")
