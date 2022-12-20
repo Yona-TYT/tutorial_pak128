@@ -221,6 +221,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 		switch (this.step) {
 			case 1:
+				local name = translate("Build here")
 				if (pot0==0){
 					local tile = my_tile(c1_start)	
 					c1_is_way = tile.find_object(mo_way)
@@ -269,6 +270,7 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(st1_pos)
 					local way = tile.find_object(mo_way)
 					local buil = tile.find_object(mo_building)
+					public_label(tile, name)
 					if(way && buil){
 						pot2 = 1
 					}
@@ -278,6 +280,7 @@ class tutorial.chapter_06 extends basic_chapter
 				else if (pot2==1 && pot3==0){
 					local tile = my_tile(st2_pos)
 					local buil = tile.find_object(mo_building)
+					public_label(tile, name)
 					if(buil){
 						pot3 = 1
 					}
@@ -288,7 +291,9 @@ class tutorial.chapter_06 extends basic_chapter
 					local tile = my_tile(c_dep1)
 					local way = tile.find_object(mo_way)
 					local depot = tile.find_object(mo_depot_air)
+					public_label(tile, name)
 					if(way && depot){
+						tile.remove_object(player_x(1), mo_label)
 						pot4 = 1
 					}
 					return 25
@@ -777,7 +782,7 @@ class tutorial.chapter_06 extends basic_chapter
 
 	function script_text()
 	{
-		local pl = player_x(pl)
+		local player = player_x(0)
 		switch (this.step) {
 			case 1:
 				// Pista de aterrizaje --------------------------
@@ -808,7 +813,7 @@ class tutorial.chapter_06 extends basic_chapter
 					coora = my_tile(c1_track.a)
 					coorb = my_tile(c1_track.b)
 					local t = command_x(tool_build_way)
-					t.work(player_x(pl), coora, coorb, obj1_way_name)
+					t.work(player, coora, coorb, obj1_way_name)
 					pot0=1
 				}
 
@@ -843,14 +848,14 @@ class tutorial.chapter_06 extends basic_chapter
 					coorb = my_tile(c2_track.b)
 
 					local t = command_x(tool_build_way)
-					t.work(player_x(pl), coora, coorb, obj2_way_name)
+					t.work(player, coora, coorb, obj2_way_name)
 					pot1 = 1
 				}
 				// Parada aerea ---------------------------------
 				if(pot2 == 0) {
 					local tile = my_tile(st1_pos)
 					local t = command_x(tool_build_station)			
-					t.work(player_x(pl), tile, sc_sta1)
+					t.work(player, tile, sc_sta1)
 					tile.unmark()
 					pot2 = 1
 				}
@@ -858,7 +863,7 @@ class tutorial.chapter_06 extends basic_chapter
 				if(pot3 == 0) {
 					local tile = my_tile(st2_pos)
 					local t = command_x(tool_build_station)			
-					t.work(player_x(pl), tile, sc_sta2)
+					t.work(player, tile, sc_sta2)
 					tile.unmark()
 					pot3 = 1
 				}
@@ -868,26 +873,25 @@ class tutorial.chapter_06 extends basic_chapter
 					local coora = my_tile(c_dep_lim1.a)
 					local coorb = my_tile(c_dep_lim1.b)
 					local t = command_x(tool_build_way)
-					t.work(player_x(pl), coora, coorb, obj2_way_name)
+					t.work(player, coora, coorb, obj2_way_name)
 					local tile = my_tile(c_dep1)
 					t = command_x(tool_build_depot)			
-					t.work(player_x(pl), tile, sc_dep1)
+					t.work(player, tile, sc_dep1)
 					tile.unmark()
 					pot4 = 1
 				}
 				if(pot5 == 0) {
 					local t = command_x(tool_make_stop_public)			
-					t.work(player_x(pl), my_tile(st1_pos), "")
+					t.work(player, my_tile(st1_pos), "")
 					pot5 = 1
 				}
 				return null
 			break;
 			case 2:
 				if (current_cov> ch6_cov_lim1.a && current_cov< ch6_cov_lim1.b){
-					local pl = player
 					local c_depot = my_tile(c_dep1)
 					try {
-						comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+						comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 					}
 					catch(ev) {
 						return null
@@ -916,7 +920,7 @@ class tutorial.chapter_06 extends basic_chapter
 			break
 			case 3:
 				local c_depot = my_tile(c_dep2)
-				comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 				if (current_cov>ch6_cov_lim2.a && current_cov<ch6_cov_lim2.b){
 					local c_list = sch_list2
 					local sch_siz = c_list.len()
@@ -954,10 +958,10 @@ class tutorial.chapter_06 extends basic_chapter
 				if(pot0==0){
 
 					local tool = command_x(tool_build_depot)
-					tool.work(player_x(pl), c_depot, sc_dep2)
+					tool.work(player, c_depot, sc_dep2)
 					pot0=1
 				}
-				comm_destroy_convoy(pl, c_depot) // Limpia los vehiculos del deposito
+				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 				if (current_cov>ch6_cov_lim3.a && current_cov<ch6_cov_lim3.b){
 					local c_list = sch_list3
 					local sch_siz = c_list.len()
@@ -1021,18 +1025,22 @@ class tutorial.chapter_06 extends basic_chapter
 		    rules.forbid_tool(pl, tool_id)
 	}
 
-
+	//case 1:  //y--
+	//case 2:  //x++
+	//case 4:  //y++
+	//case 8:  //x--
 	function check_way(coora, coorb, wt, name_list, dir = false)
 	{
 		local sve_coord = coora
 		local tile_start =  tile_x(coora.x, coora.y, coora.z)
 		local way_start = tile_start.find_object(mo_way)
+		local name = translate("Build here")
 		if(way_start){
 			way_start.mark()
-			tile_start.mark()
+			public_label(tile_start, name)
 			local start_wt = way_start.get_waytype()
 			if(start_wt != wt) {
-				tile_start.mark()
+				public_label(tile_start, name)
 				return {c = coora, result = false}
 			}
 			local start_name = way_start.get_name()
@@ -1041,7 +1049,7 @@ class tutorial.chapter_06 extends basic_chapter
 					break
 				}
 				if(j == name_list.len()-1) {
-					tile_start.mark()
+					public_label(tile_start, name)
 					return {c = coora, result = false}
 				}
 			}
@@ -1089,7 +1097,7 @@ class tutorial.chapter_06 extends basic_chapter
 			}
 
 			way_start.unmark()
-			tile_start.unmark()
+			tile_start.remove_object(player_x(1), mo_label)
 
 			while(true){
 				local current_dir = 0
@@ -1097,12 +1105,10 @@ class tutorial.chapter_06 extends basic_chapter
 				local way = tile.find_object(mo_way)
 				if(way){
 					way.unmark()
-					tile.unmark()
-
 					local current_wt = way.get_waytype()
 					if(current_wt != wt){
 						way.mark()
-						tile.mark()
+						public_label(tile_start, name)
 						return {c = coora, result = false}
 					}
 
@@ -1147,7 +1153,7 @@ class tutorial.chapter_06 extends basic_chapter
 					}
 					if ((current_dir==1)||(current_dir==2)||(current_dir==4)||(current_dir==8)){
 						way.mark()
-						tile.mark()
+						public_label(tile_start, name)
 						return {c = coora, result = false}					
 					}
 					else if(dir_start == 1){ //y--
@@ -1224,13 +1230,13 @@ class tutorial.chapter_06 extends basic_chapter
 					}
 				}
 				else {
-					tile.mark()
+					public_label(tile_start, name)
 					return {c = coora, result = false}
 				}
 			}
 		}
 		else {
-			tile_start.mark()
+			public_label(tile_start, name)
 			return {c = coora, result = false}
 		}
 	}

@@ -345,12 +345,12 @@ class tutorial.chapter_05 extends basic_chapter
 					if(!t_start.find_object(mo_way)){
 						label_x.create(coord(coora.x, coora.y), player_x(pl), translate("Place the Road here!."))
 					}
-					else t_start.remove_object(player_x(pl), mo_label)
+					else t_start.remove_object(player_x(1), mo_label)
 
 					if(!t_end.find_object(mo_way)){
 						label_x.create(coord(coorb.x, coorb.y), player_x(pl), translate("Place the Road here!."))
 					}
-					else t_end.remove_object(player_x(pl), mo_label)
+					else t_end.remove_object(player_x(1), mo_label)
 
 					//Creea un cuadro label
 					local opt = 0
@@ -387,17 +387,17 @@ class tutorial.chapter_05 extends basic_chapter
 					}
 				}
 				else if (pot1==1 && pot2==0){
-					local tile = my_tile(c_dep1)
+					local tile = my_tile(c_dep1_lim.b)
 					if(!tile.find_object(mo_way)){
-						label_x.create(c_dep1, player_x(pl), translate("Place the Road here!."))
+						label_x.create(tile, player_x(pl), translate("Place the Road here!."))
 					}
 					else {
-
 						if (!tile.find_object(mo_depot_road)){
-							label_x.create(c_dep1, player_x(pl), translate("Build a Depot here!."))
+							local lab = tile.find_object(mo_label)
+							if(lab) lab.set_text(translate("Build a Depot here!."))
 						}
 						else{
-							tile.remove_object(player_x(pl), mo_label)
+							tile.remove_object(player_x(1), mo_label)
 							pot2=1
 						}	
 					}
@@ -420,6 +420,7 @@ class tutorial.chapter_05 extends basic_chapter
                         local f_transfc = tile.find_object(mo_transformer_c)
                         local f_transfs = tile.find_object(mo_transformer_s)
                         if (f_transfc || f_transfs){
+							tile.remove_object(player_x(1), mo_label)
                             glsw[j]=1
 							transf_count++
                         }
@@ -603,7 +604,6 @@ class tutorial.chapter_05 extends basic_chapter
                     for(local j=0;j<sch_list1.len();j++){
                        if(pos.x==sch_list1[j].x && pos.y==sch_list1[j].y){
 							if(tool_id==tool_build_station || tool_id==tool_remover){
-								if(label) t.remove_object(player_x(pl), mo_label)
 								local c_list = sch_list1
 								local good = good_alias.goods
 								return is_station_truck_build(pos, tool_id, c_list, good)
@@ -614,7 +614,6 @@ class tutorial.chapter_05 extends basic_chapter
 				else if(pot1==1 && pot2==0){
 					if(pos.x>=c_dep1_lim.a.x && pos.y>=c_dep1_lim.a.y && pos.x<=c_dep1_lim.b.x && pos.y<=c_dep1_lim.b.y){
 						if(tool_id==tool_build_way || tool_id==tool_build_depot){
-							if(label) t.remove_object(player_x(pl), mo_label)
 							return null
 						}
 					}
@@ -637,7 +636,6 @@ class tutorial.chapter_05 extends basic_chapter
                             local f_transf = t.find_object(mo_transformer_c)
                             if (pos.x==transf_list[j].x && pos.y==transf_list[j].y){
                                 if (glsw[j]==0){
-                                   if(label) t.remove_object(player_x(pl), mo_label)
                                    return null
                                 }
                                 else return  translate("There is already a transformer here!")+" ("+pos.tostring()+")."
@@ -910,7 +908,7 @@ class tutorial.chapter_05 extends basic_chapter
 					//Para la carretera
 					local t_start = my_tile(c_dep1_lim.a)
 					local t_end = my_tile(c_dep1_lim.b)
-					t_start.remove_object(player_x(pl), mo_label)
+					t_start.remove_object(player_x(1), mo_label)
 					local t = command_x(tool_build_way)
 					local err = t.work(player_x(pl), t_start, t_end, sc_way_name)
 
@@ -979,7 +977,7 @@ class tutorial.chapter_05 extends basic_chapter
                         local f_transfs = tile.find_object(mo_transformer_s)
                         local label = tile.find_object(mo_label)	
                         if (label){
-							tile.remove_object(player_x(pl), mo_label)
+							tile.remove_object(player_x(1), mo_label)
                         }
 
 						local tool = command_x(tool_build_transformer)			
@@ -1194,7 +1192,7 @@ class tutorial.chapter_05 extends basic_chapter
     function delete_objet(pl, c_list, obj, lab_name, station = false)
     {
         for(local j=0;j<c_list.len();j++){
-            local tile = my_tile(c_list[j])
+            local tile = my_tile(c_list[j].c)
             local is_obj = tile.find_object(obj)
             local halt = tile.get_halt()
             if (is_obj){

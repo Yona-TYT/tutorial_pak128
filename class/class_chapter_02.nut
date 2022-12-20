@@ -373,10 +373,10 @@ class tutorial.chapter_02 extends basic_chapter
 		switch (this.step) {
 			case 1:
 				local next_mark = true
-				local c_list = [coordb, coorda, c_dep]
-				local siz = c_list.len()
+				local c_list = [my_tile(coordb), my_tile(coorda), my_tile(c_dep)]
+				local m_buil = true
 				try {
-					 next_mark = delay_mark_tile_list(c_list, siz,0)
+					 next_mark = delay_mark_tile_list(c_list, m_buil)
 				}
 				catch(ev) {
 					return 0
@@ -397,11 +397,9 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				else if ((way)&&(way.get_owner().nr==pl)){
 					if(next_mark ){
-						tile.remove_object(player_x(pl), mo_label)
 						this.next_step()
 					}
 				}
-
 				return 0
 				break;
 			case 2:
@@ -414,9 +412,11 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				//Para el deposito
 				local tile = my_tile(c_dep)
+				local label = tile.find_object(mo_label)
 				local waydepo = tile.find_object(mo_way)
 				if (!tile.find_object(mo_depot_road)){
-					label_x.create(c_dep, player_x(pl), translate("Build a Depot here!."))
+					if(label)
+						label.set_text(translate("Build a Depot here!."))
 				}
 				else if (next_mark){
 					tile.remove_object(player_x(pl), mo_label)
@@ -487,11 +487,12 @@ class tutorial.chapter_02 extends basic_chapter
 					sch_cov_correct = all_result.res == null ? true : false
 
 				}
+				if (pot2 == 1 ){
+					this.next_step()
+				}
 				if (current_cov == ch2_cov_lim1.b){
 					local conv = my_tile(sch_list1[0]).find_object(mo_car)
-					if (conv || comm_script) {						
-						comm_script = false
-						this.next_step()
+					if (conv) {
 						//Crear cuadro label
 						local opt = 0
 						label_bord(brdg_lim.a, brdg_lim.b, opt, false, "X")
@@ -499,7 +500,7 @@ class tutorial.chapter_02 extends basic_chapter
 						label_bord(del_lim1.a, del_lim1.b, opt, true, "X")
 						//label_bord(c_lock.a, c_lock.b, opt, true, "X")
                         lock_tile_list(c_lock, c_lock.len(), true, 1)
-
+						pot2=1
 					}
 				}
 
@@ -582,9 +583,6 @@ class tutorial.chapter_02 extends basic_chapter
 
 			case 7:
 				if (gcov_nr != 4 && gcov_nr != 5)
-					return 0
-
-				if (comm_script)
 					return 0
 			
 				if (pot0==0){
@@ -1013,13 +1011,6 @@ class tutorial.chapter_02 extends basic_chapter
 		switch (this.step) {
 			case 4:
 				if (current_cov>ch2_cov_lim1.a && current_cov<ch2_cov_lim1.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
 					local cov = 1
 					local veh = 1
 					local good_list = [good_desc_x (good_alias.passa).get_catg_index()] 	 //Passengers
@@ -1043,14 +1034,6 @@ class tutorial.chapter_02 extends basic_chapter
 			break
 			case 6:
 				if (current_cov>ch2_cov_lim2.a && current_cov<ch2_cov_lim2.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
-
 					local cov_list = depot.get_convoy_list()
 					local cov = cov_list.len()
 					local veh = 1
@@ -1077,13 +1060,6 @@ class tutorial.chapter_02 extends basic_chapter
 			break
 			case 7:
 				if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
-					/*if (comm_script){
-						cov_save[current_cov]=convoy
-						id_save[current_cov]=convoy.id
-						gcov_nr++
-						persistent.gcov_nr = gcov_nr
-						return null
-					}*/
 					local cov = 1
 					local veh = 1
 					local good_list = [good_desc_x (good_alias.passa).get_catg_index()] 	 //Passengers
@@ -1113,24 +1089,23 @@ class tutorial.chapter_02 extends basic_chapter
 
 	function script_text()
 	{
-		local pl = 0
-		if (!correct_cov)
-			return 0
+		local player = player_x(0)
+		
 		switch (this.step) {
 			case 1:
 				delay_mark_tile(c_dep, c_dep,0, true)
 				//Para la carretera
 				local t1 = command_x(tool_remover)
-				local err1 = t1.work(player_x(pl), my_tile(c_dep), "")
+				local err1 = t1.work(player, my_tile(c_dep), "")
 				local t2 = command_x(tool_build_way)			
-				local err2 = t2.work(player_x(pl), my_tile(coorda), my_tile(c_dep), sc_way_name)
+				local err2 = t2.work(player, my_tile(coorda), my_tile(c_dep), sc_way_name)
 				return null
 				break;
 			case 2:
 				delay_mark_tile(c_dep, c_dep,0, true)
 				//Para el deposito
 				local t = command_x(tool_build_depot)			
-				local err = t.work(player_x(pl), my_tile(c_dep), sc_dep_name)	
+				local err = t.work(player, my_tile(c_dep), sc_dep_name)	
 				return null
 				break;
 			case 3:
@@ -1140,7 +1115,7 @@ class tutorial.chapter_02 extends basic_chapter
 					local way = tile.find_object(mo_way)
 					tile.remove_object(player_x(1), mo_label)
 					local tool = command_x(tool_build_station)			
-					local err = tool.work(player_x(pl), tile, sc_station_name)
+					local err = tool.work(player, tile, sc_station_name)
 
 					if (way.is_marked()){
 						way.unmark()
@@ -1150,14 +1125,12 @@ class tutorial.chapter_02 extends basic_chapter
 				return null
 				break
 			case 4:
-				//delay_mark_tile(c_dep, c_dep,0, true)
-				comm_script = true
 				if (pot0 == 0){
 					pot0 = 1
 				}
 
 				if (current_cov>ch2_cov_lim1.a && current_cov<ch2_cov_lim1.b){
-					local player = player_x(pl)
+					local player = player
 					local c_depot = my_tile(c_dep)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
@@ -1194,17 +1167,17 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				if (pot0 == 1){
 					local tile = my_tile(brdg1)
-					tile.remove_object(player_x(pl), mo_label)
+					tile.remove_object(player_x(1), mo_label)
 					local t = command_x(tool_build_bridge)
 					t.set_flags(2)
-					local err = t.work(player_x(pl), my_tile(brdg1), my_tile(brdg2), sc_bridge_name)
+					local err = t.work(player, my_tile(brdg1), my_tile(brdg2), sc_bridge_name)
 				}
 	
 				return null
 				break
 
 			case 6:
-				local player = player_x(pl)
+				local player = player
 				local c_depot = my_tile(c_dep)
 				comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
@@ -1243,15 +1216,13 @@ class tutorial.chapter_02 extends basic_chapter
 				break
 
 			case 7:
-
-				comm_script = true
 				if (pot1==0){
 					for(local j=0;j<sch_list3.len();j++){
 						local tile = my_tile(sch_list3[j])
 						local way = tile.find_object(mo_way)
 						tile.remove_object(player_x(1), mo_label)
 						local tool = command_x(tool_build_station)			
-						local err = tool.work(player_x(pl), tile, sc_station_name)
+						local err = tool.work(player, tile, sc_station_name)
 
 						if (way.is_marked()){
 							way.unmark()
@@ -1260,10 +1231,10 @@ class tutorial.chapter_02 extends basic_chapter
 				}
 				if (pot2==0){
 					local t = command_x(tool_build_way)			
-					local err = t.work(player_x(1), my_tile(c_label1.a), my_tile(c_label1.b), sc_way_name)
+					local err = t.work(player, my_tile(c_label1.a), my_tile(c_label1.b), sc_way_name)
 				}
 				if (current_cov>ch2_cov_lim3.a && current_cov<ch2_cov_lim3.b){
-					local player = player_x(pl)
+					local player = player
 					local c_depot = my_tile(c_dep)
 					comm_destroy_convoy(player, c_depot) // Limpia los vehiculos del deposito
 
@@ -1297,9 +1268,9 @@ class tutorial.chapter_02 extends basic_chapter
 			case 8:
 				if (pot0==0){
 					local t1 = command_x(tool_make_stop_public)			
-					local err1 = t1.work(player_x(pl), my_tile(pub_st1), "")
+					local err1 = t1.work(player, my_tile(pub_st1), "")
 					local t2 = command_x(tool_make_stop_public)			
-					local err2 = t2.work(player_x(pl), my_tile(pub_st2), "")
+					local err2 = t2.work(player, my_tile(pub_st2), "")
 				}
 				return null
 				break

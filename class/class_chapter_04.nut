@@ -212,7 +212,7 @@ class tutorial.chapter_04 extends basic_chapter
 			text.w1 = c1.href(" ("+c1.tostring()+")")+""
 			text.w2 = c2.href(" ("+c2.tostring()+")")+""
 			text.dock = sch_list2[1].href("("+sch_list2[1].tostring()+")")+""
-			text.all_cov = d1_cnr
+			text.all_cov = d2_cnr
 			text.load = ship1_load
 			text.wait = get_wait_time_text(ship1_wait)
 			
@@ -279,7 +279,6 @@ class tutorial.chapter_04 extends basic_chapter
 	
 	function is_chapter_completed(pl) {
 		local percentage=0
-		persistent.point = point
 		save_pot()
 		save_glsw()
 		switch (this.step) {
@@ -340,7 +339,7 @@ class tutorial.chapter_04 extends basic_chapter
 					label_x.create(c_dep1, player_x(pl), translate("Build Shipyard here!."))
 				}
 				else{
-					t1.remove_object(player_x(pl), mo_label)
+					t1.remove_object(player_x(1), mo_label)
 					glsw[0]=1
 				}
 				return 10+percentage
@@ -398,12 +397,12 @@ class tutorial.chapter_04 extends basic_chapter
 				else if (pot0==1 && pot1==0){
 					local t = my_tile(sch_list2[1])
 					local dock4 = t.find_object(mo_building)
-					if (!dock4){
-					label_x.create(sch_list2[1], player_x(pl), translate("Build a Dock here!."))
-					}
-					else{
-						if (is_station_build(0, sch_list2[1], good_alias.goods)==null)
+ 					public_label(t, translate("Build a Dock here!."))
+					if (dock4){
+						if (is_station_build(0, sch_list2[1], good_alias.goods)==null){
+							t.remove_object(player_x(1), mo_label)
 							pot1=1
+						}
 					}
 				}
 				//Para Astillero
@@ -415,7 +414,7 @@ class tutorial.chapter_04 extends basic_chapter
 						label_x.create(c_dep2, player_x(pl), translate("Build Shipyard here!."))
 					}
 					else{
-						t1.remove_object(player_x(pl), mo_label)
+						t1.remove_object(player_x(1), mo_label)
 						pot2=1
 					}
 				}
@@ -468,7 +467,6 @@ class tutorial.chapter_04 extends basic_chapter
 				this.step=1
 				persistent.step=1
 				persistent.status.step = 1
-				persistent.point = null
 				return 100
 				break
 		}
@@ -579,7 +577,6 @@ class tutorial.chapter_04 extends basic_chapter
 					}					
 					if(pos.x==sch_list2[1].x && pos.y==sch_list2[1].y){
 						if(tool_id==tool_build_station){
-							t.remove_object(player_x(pl), mo_label)
 							return null
 						}	
 					}
@@ -803,7 +800,7 @@ class tutorial.chapter_04 extends basic_chapter
 				local name = sc_dock_name1
 				for(local j =0;j<c_list.len();j++){
 					local tile = my_tile(c_list[j])
-					tile.remove_object(player, mo_label)
+					tile.remove_object(player_x(1), mo_label)
 					local tool = command_x(tool_build_station)			
 					local err = tool.work(player, tile, name)
 				}
@@ -816,7 +813,7 @@ class tutorial.chapter_04 extends basic_chapter
 				local label = t1.find_object(mo_label)
 
 				if (label){
-					t1.remove_object(player, mo_label)
+					t1.remove_object(player_x(1), mo_label)
 				}
 				
 				local tool = command_x(tool_build_depot)			
@@ -885,12 +882,10 @@ class tutorial.chapter_04 extends basic_chapter
 					
 					local t = command_x(tool_build_way)	
 					t.set_flags(2)		
-					local err = t.work(player_x(1), coora, coorb, sc_way_name)
-
-					pot0=1
+					local err = t.work(player, coora, coorb, sc_way_name)
 				}
 				//Para el cuarto muelle
-				if (pot0==1 && pot1==0){
+				if (pot1==0){
 					local t = my_tile(sch_list2[1])
 					local label = t.find_object(mo_label)
 					if (label){
@@ -898,21 +893,17 @@ class tutorial.chapter_04 extends basic_chapter
 					}
 					local tool = command_x(tool_build_station)			
 					local err = tool.work(player, t, sc_dock_name2)
-
-					pot1=1
 				}
 				//Para Astillero
-				if (pot1==1 && pot2==0){
+				if (pot2==0){
 					local t1 = my_tile(c_dep2)
 					local label = t1.find_object(mo_label)
 
 					if (label){
-						t1.remove_object(player, mo_label)
+						t1.remove_object(player_x(1), mo_label)
 					}
 					local tool = command_x(tool_build_depot)			
 					local err = tool.work(player, t1, sc_dep_name)
-
-					pot2 = 1
 				}
 				if (current_cov> ch4_cov_lim2.a && current_cov< ch4_cov_lim2.b){
 					local c_depot = my_tile(c_dep2)
@@ -955,7 +946,7 @@ class tutorial.chapter_04 extends basic_chapter
 				for(local j =0;j<c_list.len();j++){
 					local t = my_tile(c_list[j])
 					t.unmark()
-					t.remove_object(player, mo_label)
+					t.remove_object(player_x(1), mo_label)
 					local tool = command_x(tool_build_station)			
 					tool.work(player, t, name)
 					glsw[j]=1
